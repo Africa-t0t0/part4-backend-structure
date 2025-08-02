@@ -1,12 +1,10 @@
-const Contact = require("./models");
-const { inputdataBaseUri1, inputdataBaseUri2 } = require("./database");
+const Contact = require("../models/models.js");
+const { inputdataBaseUri1, inputdataBaseUri2 } = require("../database");
 const mongoose = require("mongoose");
 
 
 
 function storeContactInDatabase(password, name, number) {
-
-
     if (password === null) {
         throw new Error("Password is requiered for querying!");
     }
@@ -29,8 +27,7 @@ function storeContactInDatabase(password, name, number) {
             name: name,
             number: number
         });
-        contact.save().then(result => {
-            console.log("element", result);
+        contact.save().then(_ => {
             // muy importante cerrar la conexión solo cuando ya se hayan
             // realizado las operaciones, no pongas nunca mongoose.connection.close
             // fuera del then!

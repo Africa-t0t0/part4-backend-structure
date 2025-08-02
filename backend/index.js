@@ -1,4 +1,4 @@
-const Contact = require("./models");
+const Contact = require("./models/models.js");
 
 const express = require("express");
 const morgan = require("morgan");

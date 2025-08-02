@@ -30,4 +30,18 @@ function validatePhoneNumber (number) {
  * @param {string} number - The phone number to validate
  * @returns {boolean} true if the phone number is valid, false otherwise
  */
-module.exports = validatePhoneNumber;
+
+
+const info = (...params) => {
+    console.log(...params);
+};
+
+const error = (...params) => {
+    console.error(...params);
+};
+
+module.exports = {
+    validatePhoneNumber,
+    info,
+    error
+};
