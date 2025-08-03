@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { dataBaseUri } = require("../database");
 
-const { validatePhoneNumber } = require("../utils");
+const { validatePhoneNumber } = require("../utils/utils");
 
 mongoose.set("strictQuery", false);
 mongoose.connect(dataBaseUri)
