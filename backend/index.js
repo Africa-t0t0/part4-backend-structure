@@ -1,4 +1,5 @@
 const Contact = require("./models/models.js");
+const logger = require("./utils/logger");
 
 const express = require("express");
 const morgan = require("morgan");
@@ -12,7 +13,7 @@ app.use(morgan(":method :url :status :res[content-length] - :response-time ms :b
 
 
 const errorHandler = (error, request, response, next) => {
-    console.error(error.message);
+    logger.error(error.message);
 
     if (error.name === "CastError") {
         return response.status(400).send({ error: "malformatted id" });
@@ -132,5 +133,5 @@ const PORT = process.env.PORT || 3001;
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    logger.info(`Server running on port ${PORT}`);
 });
