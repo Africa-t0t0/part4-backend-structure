@@ -1,17 +1,10 @@
-require('dotenv').config()
+require("dotenv").config();
 
-const dbUserName = process.env.DB_USERNAME
-const dbPassword = process.env.DB_PASSWORD
-const dbCluster = process.env.DB_CLUSTER
-
-
-const dataBaseUri = `mongodb+srv://${dbUserName}:${dbPassword}@${dbCluster}.mongodb.net/contactApp?retryWrites=true&w=majority`
-const inputdataBaseUri1 = `mongodb+srv://${dbUserName}:`;
-const inputdataBaseUri2 = `@${dbCluster}.mongodb.net/contactApp?retryWrites=true&w=majority`
+const { DB_URI, DB_URI_1, DB_URI_2 } = require("./utils/config");
 
 
 module.exports = {
-    dataBaseUri,
-    inputdataBaseUri1,
-    inputdataBaseUri2
-}
+    DB_URI,
+    DB_URI_1,
+    DB_URI_2
+};

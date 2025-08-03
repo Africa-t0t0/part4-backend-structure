@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const { dataBaseUri } = require("../database");
+const { DB_URI } = require("../database");
 
 const { validatePhoneNumber } = require("../utils/utils");
 
 mongoose.set("strictQuery", false);
-mongoose.connect(dataBaseUri)
+mongoose.connect(DB_URI)
     .then(result => {
         console.log("mongo connection success!");
     })
