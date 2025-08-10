@@ -2,9 +2,12 @@ const contactsRouter = require("express").Router();
 
 const Contact = require("../models/models.js");
 
-contactsRouter.get("/", (request, response) => {
+contactsRouter.get("/", (request, response, next) => {
+    console.log("GET /api/persons", request.body);
     Contact.find({}).then(contacts => {
         response.json(contacts);
+    }).catch(error => {
+        next(error);
     });
 });
 
