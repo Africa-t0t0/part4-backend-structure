@@ -56,14 +56,21 @@ test('blog without url is not added', async () => {
 });
 
 
-test.only('a specific blog can be viewed', async () => {
+test('a specific blog can be viewed', async () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToView = blogsAtStart[0];
-
-    const resultNote = await api.get(`/api/blogs/${blogToView.id}`).expect(200).expect('Content-Type', /application\/json/)
+    const resultNote = await api.get(`/api/blogs/${blogToView._id}`).expect(200).expect('Content-Type', /application\/json/)
     assert.strictEqual(resultNote.body.title, blogToView.title)
 })
 
+
+test.only('a blog can be deleted', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[0];
+    await api.delete(`/api/blogs/${blogToDelete._id}`).expect(204)
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+})
 
 after(async () => {
     await mongoose.connection.close();
