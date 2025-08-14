@@ -8,20 +8,6 @@ const Blog = require('../models/models');
 const helper = require('./test_helpers');
 const api = supertest(app);
 
-const initialBlogs = [
-    {
-        title: "First blog",
-        author: "First author",
-        url: "https://firstblog.com",
-        likes: 1
-    },
-    {
-        title: "Second blog",
-        author: "Second author",
-        url: "https://secondblog.com",
-        likes: 2
-    }
-];
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -58,7 +44,7 @@ test('a valid blog can be added', async () => {
 });
 
 
-test.only('blog without url is not added', async () => {
+test('blog without url is not added', async () => {
     const newBlog = {
         title: "Third blog",
         author: "Third author",
@@ -67,6 +53,15 @@ test.only('blog without url is not added', async () => {
     await api.post('/api/blogs').send(newBlog).expect(400)
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+});
+
+
+test.only('a specific blog can be viewed', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToView = blogsAtStart[0];
+
+    const resultNote = await api.get(`/api/blogs/${blogToView.id}`).expect(200).expect('Content-Type', /application\/json/)
+    assert.strictEqual(resultNote.body.title, blogToView.title)
 })
 
 
