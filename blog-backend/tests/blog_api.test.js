@@ -5,6 +5,7 @@ const app = require('../app');
 const assert = require('node:assert');
 const Blog = require('../models/models');
 
+const helper = require('./test_helpers');
 const api = supertest(app);
 
 const initialBlogs = [
@@ -24,9 +25,9 @@ const initialBlogs = [
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    let blogObject = new Blog(initialBlogs[0])
+    let blogObject = new Blog(helper.initialBlogs[0])
     await blogObject.save()
-    blogObject = new Blog(initialBlogs[1])
+    blogObject = new Blog(helper.initialBlogs[1])
     await blogObject.save()
 });
 
@@ -51,8 +52,9 @@ test('a valid blog can be added', async () => {
         likes: 3
     }
     await api.post('/api/blogs').send(newBlog)
-    const response = await api.get('/api/blogs')
-    assert.strictEqual(response.body.length, initialBlogs.length + 1)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
 });
 
 
@@ -63,8 +65,8 @@ test.only('blog without url is not added', async () => {
         likes: 3
     }
     await api.post('/api/blogs').send(newBlog).expect(400)
-    const response = await api.get('/api/blogs')
-    assert.strictEqual(response.body.length, initialBlogs.length)
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
 
