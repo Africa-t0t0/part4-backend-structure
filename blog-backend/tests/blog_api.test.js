@@ -11,10 +11,10 @@ const api = supertest(app);
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    let blogObject = new Blog(helper.initialBlogs[0])
-    await blogObject.save()
-    blogObject = new Blog(helper.initialBlogs[1])
-    await blogObject.save()
+
+    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+    const promises = blogObjects.map(blog => blog.save())
+    await Promise.all(promises)
 });
 
 test('blogs are returned as json', async () => {
@@ -64,13 +64,24 @@ test('a specific blog can be viewed', async () => {
 })
 
 
-test.only('a blog can be deleted', async () => {
+test('a blog can be deleted', async () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
     await api.delete(`/api/blogs/${blogToDelete._id}`).expect(204)
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
-})
+});
+
+test.only('a blog must have likes', async () => {
+    const blogWithoutLikes = {
+        title: "Third blog",
+        author: "Third author",
+        url: "https://thirdblog.com"
+    }
+    await api.post('/api/blogs').send(blogWithoutLikes).expect(400)
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+});
 
 after(async () => {
     await mongoose.connection.close();
