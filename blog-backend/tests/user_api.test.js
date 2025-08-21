@@ -35,13 +35,37 @@ describe('when there is initially one user in db', () => {
         assert.strictEqual(usernames.includes('user3'), true)
     })
 
-    test.only('creation fails with a username that is already taken', async () => {
+    test('creation fails with a username that is already taken', async () => {
         const usersAtStart = await helper.usersInDb()
         console.log("usersAtStart", usersAtStart)
         const newUser = {
             username: 'root',
             name: 'Root',
             password: 'password1'
+        }
+        await api.post('/api/users').send(newUser).expect(400).expect('Content-Type', /application\/json/)
+        const usersAtEnd = await helper.usersInDb()
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test.only('creation fails with a username that is too short', async () => {
+        const usersAtStart = await helper.usersInDb()
+        const newUser = {
+            username: 'us',
+            name: 'User',
+            password: 'password'
+        }
+        await api.post('/api/users').send(newUser).expect(400).expect('Content-Type', /application\/json/)
+        const usersAtEnd = await helper.usersInDb()
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    });
+
+    test.only('creation fails with a password that is too short', async () => {
+        const usersAtStart = await helper.usersInDb()
+        const newUser = {
+            username: 'user4',
+            name: 'User 4',
+            password: 'pa'
         }
         await api.post('/api/users').send(newUser).expect(400).expect('Content-Type', /application\/json/)
         const usersAtEnd = await helper.usersInDb()
