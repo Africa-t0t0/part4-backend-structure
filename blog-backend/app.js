@@ -14,6 +14,7 @@ app.use(middleware.requestLogger)
 app.use(express.json())
 
 app.use(middleware.jwtVerify)
+app.use(middleware.userExtractor)
 
 app.use('/api/login', loginRouter)
 app.use('/api/users', userRouter)
