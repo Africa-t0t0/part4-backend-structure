@@ -9,10 +9,11 @@ const userRouter = require('./controllers/users')
 
 const app = express()
 
-
 app.use(cors())
 app.use(middleware.requestLogger)
 app.use(express.json())
+
+app.use(middleware.jwtVerify)
 
 app.use('/api/login', loginRouter)
 app.use('/api/users', userRouter)
